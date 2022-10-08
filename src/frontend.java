@@ -16,14 +16,14 @@ public class frontend extends JFrame {
 
 	private JPanel frame;
 	private JTextField Input_text;
-	static short[] MEM=new short[4096];
-	static short pc;
-	static short[] gpr =new short[4];
-	static short[] ixr =new short[4];
-	static short mar;
-	static short mbr;
-	static short ir;
-	static short memStart;
+	static int pc;
+	Memory MEM=new Memory();
+	static int[] gpr =new int[4];
+	static int[] ixr =new int[4];
+	static int mar;
+	static int mbr;
+	static int ir;
+	static int memStart;
 	private JTextField MAR_Value;
 	private JTextField MBR_Value;
 	private JTextField PC_Value;
@@ -93,6 +93,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			String st = Input_text.getText();
 			MAR_Value.setText(st);
+			mar=Integer.parseInt(st,2);
 			}
 		});
 		frame.add(MAR_load);
@@ -103,6 +104,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st1=Input_text.getText();
 				MBR_Value.setText(st1);
+				mbr=Integer.parseInt(st1,2);
 			}
 		});
 		frame.add(MBR_load);
@@ -111,18 +113,26 @@ public class frontend extends JFrame {
 		btnNewButton.setBounds(637, 362, 108, 20);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			MBR_Value.setText(Integer.toHexString(MEM[Short.parseShort(MAR_Value.getText(),16)]));
+			mbr=MEM.getMemory(Integer.parseInt(MAR_Value.getText(),2));
+			int mbl=16-Integer.toBinaryString(mbr).length();
+			String mbx="";
+			for(int i=0;i<mbl;i++)
+			{
+				mbx=mbx+"0";
+			}
+			mbx=mbx+Integer.toBinaryString(mbr);
+			MBR_Value.setText(mbx);
 			}
 		});
 		frame.add(btnNewButton);
 		
 		MAR_Value = new JTextField();
-		MAR_Value.setBounds(587, 41, 96, 20);
+		MAR_Value.setBounds(517, 41, 166, 20);
 		frame.add(MAR_Value);
 		MAR_Value.setColumns(10);
 		
 		MBR_Value = new JTextField();
-		MBR_Value.setBounds(587, 73, 96, 20);
+		MBR_Value.setBounds(517, 73, 166, 20);
 		frame.add(MBR_Value);
 		MBR_Value.setColumns(10);
 		
@@ -131,7 +141,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st6 = Input_text.getText();
 				PC_Value.setText(st6);
-				pc=Short.parseShort(st6,16);
+				pc=Integer.parseInt(st6,2);
 			}
 		});
 		PC_Load.setBounds(732, 13, 92, 23);
@@ -142,12 +152,12 @@ public class frontend extends JFrame {
 		frame.add(lblNewLabel);
 		
 		PC_Value = new JTextField();
-		PC_Value.setBounds(587, 10, 96, 20);
+		PC_Value.setBounds(517, 10, 166, 20);
 		frame.add(PC_Value);
 		PC_Value.setColumns(10);
 		
 		IR_Value = new JTextField();
-		IR_Value.setBounds(587, 114, 96, 20);
+		IR_Value.setBounds(517, 114, 166, 20);
 		frame.add(IR_Value);
 		IR_Value.setColumns(10);
 		
@@ -156,12 +166,12 @@ public class frontend extends JFrame {
 		frame.add(lblNewLabel_2);
 		
 		textField = new JTextField();
-		textField.setBounds(587, 156, 57, 20);
+		textField.setBounds(592, 156, 84, 20);
 		frame.add(textField);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(587, 192, 38, 20);
+		textField_1.setBounds(637, 192, 38, 20);
 		frame.add(textField_1);
 		textField_1.setColumns(10);
 		
@@ -205,7 +215,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st1 = Input_text.getText();
 				GPR0_Value.setText(st1);
-				gpr[0]=Short.parseShort(st1,16);
+				gpr[0]=Integer.parseInt(st1,2);
 			}
 		});
 		GPR0_Ld.setBounds(349, 13, 68, 23);
@@ -216,7 +226,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st2 = Input_text.getText();
 				GPR1_Value.setText(st2);
-				gpr[1]=Short.parseShort(st2,16);
+				gpr[1]=Integer.parseInt(st2,2);
 			}
 		});
 		GPR1_Ld.setBounds(346, 54, 71, 23);
@@ -227,7 +237,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st3 = Input_text.getText();
 				GPR2_Value.setText(st3);
-				gpr[2]=Short.parseShort(st3,16);
+				gpr[2]=Integer.parseInt(st3,2);
 			}
 		});
 		GPR2_Ld.setBounds(349, 94, 68, 23);
@@ -238,7 +248,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st4 = Input_text.getText();
 				GPR3_Value.setText(st4);
-				gpr[3]=Short.parseShort(st4,16);
+				gpr[3]=Integer.parseInt(st4,2);
 			}
 		});
 		GPR3_Ld.setBounds(349, 136, 68, 23);
@@ -249,7 +259,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st4 = Input_text.getText();
 				IXR1_Value.setText(st4);
-				ixr[1]=Short.parseShort(st4,16);
+				ixr[1]=Integer.parseInt(st4,2);
 			}
 		});
 		IXR1_Ld.setBounds(349, 173, 68, 23);
@@ -260,7 +270,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st5 = Input_text.getText();
 				IXR2_Value.setText(st5);
-				ixr[2]=Short.parseShort(st5,16);
+				ixr[2]=Integer.parseInt(st5,2);
 			}
 		});
 		IXR2_Load.setBounds(349, 216, 68, 23);
@@ -271,7 +281,7 @@ public class frontend extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String st7 = Input_text.getText();
 				IXR3_Value.setText(st7);
-				ixr[3]=Short.parseShort(st7,16);
+				ixr[3]=Integer.parseInt(st7,2);
 			}
 		});
 		IXR3_Ld.setBounds(349, 257, 68, 23);
@@ -308,6 +318,9 @@ public class frontend extends JFrame {
 		JButton btnNewButton_9 = new JButton("Store");
 		btnNewButton_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				mar=Integer.parseInt(MAR_Value.getText(),2);
+				mbr=Integer.parseInt(MBR_Value.getText(),2);
+				MEM.setMemory(mar, mbr);
 			}
 		});
 		btnNewButton_9.setBounds(483, 361, 67, 23);
@@ -324,16 +337,35 @@ public class frontend extends JFrame {
 		JButton btnNewButton_11 = new JButton("Init");
 		btnNewButton_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pc=Short.parseShort(PC_Value.getText(),16);
+				pc=3596;
+				pc=Integer.parseInt(PC_Value.getText(),2);
+				int pcl=16-Integer.toBinaryString(pc).length();
+				String pcx="";
+				for(int i=0;i<pcl;i++)
+				{
+					pcx=pcx+"0";
+				}
+				pcx=pcx+Integer.toBinaryString(pc);
+				PC_Value.setText(pcx);
+				GPR0_Value.setText("0000000000000000");
+				GPR1_Value.setText("0000000000000000");
+				GPR2_Value.setText("0000000000000000");
+				GPR3_Value.setText("0000000000000000");
+				IXR1_Value.setText("0000000000000000");
+				IXR2_Value.setText("0000000000000000");
+				IXR3_Value.setText("0000000000000000");
+				MAR_Value.setText("0000000000000000");
+				MBR_Value.setText("0000000000000000");
+				IR_Value.setText("0000000000000000");
 				File f= new File("C:\\Users\\irfan\\Documents\\input.txt");
-				File f1= new File("C:\\Users\\irfan\\Documents\\Instructions.txt");
+				//File f1= new File("C:\\Users\\irfan\\Documents\\Instructions.txt");
 				try {
 				Scanner s=new Scanner(f);
 				while(s.hasNextLine())
 				{
 					String s1=s.nextLine();
 					String[] sa=s1.split(" ");
-					MEM[Short.parseShort(sa[0],16)]=Short.parseShort(sa[1],16);	
+					MEM.setMemory(Integer.parseInt(sa[0],16),Integer.parseInt(sa[1],16));	
 				}
 				}
 				catch(Exception ex)
@@ -341,19 +373,19 @@ public class frontend extends JFrame {
 					System.out.println("Exception occured in input file"+ex);
 				}
 				
-				try {
+				/*try {
 				Scanner sc=new Scanner(f1);
-				memStart=pc;
 					while(sc.hasNextLine())
 					{
 						String s1=sc.nextLine();
-						MEM[memStart++]=Short.parseShort(s1,16);	
+						MEM[memStart++]=Integer.parseInt(s1,16);	
 					}
 					}
 					catch(Exception ex)
 					{
 						System.out.println("Exception occured in Instructions file"+ex);
 					}
+					*/
 			}
 		});
 		btnNewButton_11.setBounds(757, 361, 56, 23);
@@ -362,14 +394,28 @@ public class frontend extends JFrame {
 		JButton btnNewButton_12 = new JButton("SS");
 		btnNewButton_12.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MAR_Value.setText(PC_Value.getText());
+				int pcl=16-Integer.toBinaryString(pc).length();
+				String pcx="";
+				for(int i=0;i<pcl;i++)
+				{
+					pcx=pcx+"0";
+				}
+				pcx=pcx+Integer.toBinaryString(pc);
+				PC_Value.setText(pcx);
+				MAR_Value.setText(pcx);
 				mar=pc;
-				mbr=MEM[mar];
-				MBR_Value.setText(Integer.toHexString(mbr));
+				mbr=MEM.getMemory(mar);
+				int mbl=16-Integer.toBinaryString(mbr).length();
+				String mbrx="";
+				for(int i=0;i<mbl;i++)
+				{
+					mbrx=mbrx+"0";
+				}
+				mbrx=mbrx+Integer.toBinaryString(mbr);
+				MBR_Value.setText(mbrx);
 				ir=mbr;
 				IR_Value.setText(MBR_Value.getText());
 				int ai=16-Integer.toBinaryString(mbr).length();
-				System.out.println("len of ai "+ai);
 				String ir16="";
 				for(int i=0;i<ai;i++)
 				{
@@ -381,21 +427,29 @@ public class frontend extends JFrame {
 				short ix=Short.parseShort(ir16.substring(8,10),2);
 				short ia=Short.parseShort(ir16.substring(10,11),2);
 				short add=Short.parseShort(ir16.substring(11),2);
-				short eadd=0;
+				int eadd=0;
 				ixr[0]=0;
 				switch(op)
 				{
+				case 0:
+					System.out.println("Instructions are completed");
+					break;
 				case 1:
 					if(ia==0)
 					{
-						eadd=(short)(add+ixr[ix]);
+						eadd=(add+ixr[ix]);
 					}	
 					else if(ia==1)
 					{
-						eadd=MEM[(short)(add+ixr[ix])];
+						eadd=MEM.getMemory(add+ixr[ix]);
 					}
-					gpr[r]=MEM[eadd];
-					String mem16=Integer.toHexString(gpr[r]);
+					gpr[r]=MEM.getMemory(eadd);
+					int mem16l=16-Integer.toBinaryString(gpr[r]).length();
+					String mem16="";
+					for(int i=0;i<mem16l;i++)
+					{
+						mem16=mem16+"0";
+					}mem16=mem16+Integer.toBinaryString(gpr[r]);
 					if(r==0)
 					{
 						GPR0_Value.setText(mem16);
@@ -413,9 +467,95 @@ public class frontend extends JFrame {
 						GPR3_Value.setText(mem16);
 					}
 					break;
+				case 2:
+					if(ia==0)
+					{
+						eadd=(add+ixr[ix]);
+					}	
+					else if(ia==1)
+					{
+						eadd=MEM.getMemory(add+ixr[ix]);
+					}
+					MEM.setMemory(eadd, gpr[r]);
+					break;
+				case 3:
+					if(ia==0)
+					{
+						eadd=(add+ixr[ix]);
+					}	
+					else if(ia==1)
+					{
+						eadd=MEM.getMemory(add+ixr[ix]);
+					}
+					gpr[r]=eadd;
+					int mem163l=16-Integer.toBinaryString(gpr[r]).length();
+					String mem163="";
+					for(int i=0;i<mem163l;i++)
+					{
+						mem163=mem163+"0";
+					}
+					mem163=mem163+Integer.toBinaryString(gpr[r]);
+					if(r==0)
+					{
+						GPR0_Value.setText(mem163);
+					}
+					else if(r==1)
+					{
+						GPR1_Value.setText(mem163);
+					}
+					else if(r==2)
+					{
+						GPR2_Value.setText(mem163);
+					}
+					else if(r==3)
+					{
+						GPR3_Value.setText(mem163);
+					}
+					break;
+				case 41:
+					if(ia==0)
+					{
+						eadd=(add);
+					}	
+					else if(ia==1)
+					{
+						eadd=MEM.getMemory(add);
+					}
+					ixr[r]=MEM.getMemory(eadd);;
+					int mem16xl=16-Integer.toBinaryString(ixr[r]).length();
+					String mem16x="";
+					for(int i=0;i<mem16xl;i++)
+					{
+						mem16x=mem16x+"0";
+					}
+					mem16x=mem16x+Integer.toBinaryString(ixr[r]);
+					if(ix==1)
+					{
+						IXR1_Value.setText(mem16x);
+					}
+					else if(ix==2)
+					{
+						IXR2_Value.setText(mem16x);
+					}
+					else if(ix==3)
+					{
+						IXR3_Value.setText(mem16x);
+					}
+					break;
+				case 42:
+					if(ia==0)
+					{
+						eadd=(add);
+					}	
+					else if(ia==1)
+					{
+						eadd=MEM.getMemory(add);
+					}
+					MEM.setMemory(eadd, ixr[ix]);
+					break;
 				}
 				pc++;
-			}
+			} 
 		});
 		btnNewButton_12.setBounds(587, 399, 89, 23);
 		frame.add(btnNewButton_12);
@@ -423,48 +563,65 @@ public class frontend extends JFrame {
 		JButton btnNewButton_13 = new JButton("Run");
 		btnNewButton_13.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Run:
 				while(memStart-pc!=0)
 				{
-
-					MAR_Value.setText(PC_Value.getText());
+					int pcl=16-Integer.toBinaryString(pc).length();
+					String pcx="";
+					for(int i=0;i<pcl;i++)
+					{
+						pcx=pcx+"0";
+					}
+					pcx=pcx+Integer.toBinaryString(pc);
+					PC_Value.setText(pcx);
+					MAR_Value.setText(pcx);
 					mar=pc;
-					mbr=MEM[mar];
-					MBR_Value.setText(Integer.toBinaryString(mbr));
+					mbr=MEM.getMemory(mar);
+					int mbl=16-Integer.toBinaryString(mbr).length();
+					String mbrx="";
+					for(int i=0;i<mbl;i++)
+					{
+						mbrx=mbrx+"0";
+					}
+					mbrx=mbrx+Integer.toBinaryString(mbr);
+					MBR_Value.setText(mbrx);
 					ir=mbr;
 					IR_Value.setText(MBR_Value.getText());
-					int ai=16-IR_Value.getText().length();
+					int ai=16-Integer.toBinaryString(mbr).length();
 					String ir16="";
 					for(int i=0;i<ai;i++)
 					{
 						ir16=ir16+"0";
 					}
-					ir16=ir16+IR_Value.getText();
+					ir16=ir16+Integer.toBinaryString(mbr);
 					short op=Short.parseShort(ir16.substring(0,6),2);
 					short r=Short.parseShort(ir16.substring(6,8),2);
 					short ix=Short.parseShort(ir16.substring(8,10),2);
 					short ia=Short.parseShort(ir16.substring(10,11),2);
 					short add=Short.parseShort(ir16.substring(11),2);
-					short eadd=0;
+					int eadd=0;
 					ixr[0]=0;
 					switch(op)
 					{
+					case 0:
+						System.out.println("Instructions are completed");
+						break Run;
 					case 1:
 						if(ia==0)
 						{
-							eadd=(short)(add+ixr[ix]);
+							eadd=(add+ixr[ix]);
 						}	
 						else if(ia==1)
 						{
-							eadd=MEM[(short)(add+ixr[ix])];
+							eadd=MEM.getMemory(add+ixr[ix]);
 						}
-						gpr[r]=MEM[eadd];
-						int lg=16-Integer.toBinaryString(gpr[r]).length();
+						gpr[r]=MEM.getMemory(eadd);
+						int mem16l=16-Integer.toBinaryString(gpr[r]).length();
 						String mem16="";
-						for(int i=0;i<lg;i++)
+						for(int i=0;i<mem16l;i++)
 						{
 							mem16=mem16+"0";
-						}
-						mem16=mem16+Integer.toBinaryString(gpr[r]);
+						}mem16=mem16+Integer.toBinaryString(gpr[r]);
 						if(r==0)
 						{
 							GPR0_Value.setText(mem16);
@@ -482,9 +639,94 @@ public class frontend extends JFrame {
 							GPR3_Value.setText(mem16);
 						}
 						break;
+					case 2:
+						if(ia==0)
+						{
+							eadd=(add+ixr[ix]);
+						}	
+						else if(ia==1)
+						{
+							eadd=MEM.getMemory(add+ixr[ix]);
+						}
+						MEM.setMemory(eadd, gpr[r]);
+						break;
+					case 3:
+						if(ia==0)
+						{
+							eadd=(add+ixr[ix]);
+						}	
+						else if(ia==1)
+						{
+							eadd=MEM.getMemory(add+ixr[ix]);
+						}
+						gpr[r]=eadd;
+						int mem163l=16-Integer.toBinaryString(gpr[r]).length();
+						String mem163="";
+						for(int i=0;i<mem163l;i++)
+						{
+							mem163=mem163+"0";
+						}
+						mem163=mem163+Integer.toBinaryString(gpr[r]);
+						if(r==0)
+						{
+							GPR0_Value.setText(mem163);
+						}
+						else if(r==1)
+						{
+							GPR1_Value.setText(mem163);
+						}
+						else if(r==2)
+						{
+							GPR2_Value.setText(mem163);
+						}
+						else if(r==3)
+						{
+							GPR3_Value.setText(mem163);
+						}
+						break;
+					case 41:
+						if(ia==0)
+						{
+							eadd=(add+ixr[ix]);
+						}	
+						else if(ia==1)
+						{
+							eadd=MEM.getMemory(add+ixr[ix]);
+						}
+						ixr[r]=MEM.getMemory(eadd);
+						int mem16xl=16-Integer.toBinaryString(ixr[r]).length();
+						String mem16x="";
+						for(int i=0;i<mem16xl;i++)
+						{
+							mem16x=mem16x+"0";
+						}
+						mem16x=mem16x+Integer.toBinaryString(ixr[r]);
+						if(ix==1)
+						{
+							IXR1_Value.setText(mem16x);
+						}
+						else if(ix==2)
+						{
+							IXR2_Value.setText(mem16x);
+						}
+						else if(ix==3)
+						{
+							IXR3_Value.setText(mem16x);
+						}
+						break;
+					case 42:
+						if(ia==0)
+						{
+							eadd=(add+ixr[ix]);
+						}	
+						else if(ia==1)
+						{
+							eadd=MEM.getMemory(add+ixr[ix]);
+						}
+						MEM.setMemory(eadd, ixr[ix]);
+						break;
 					}
 					pc++;
-				
 				}
 			}
 		});
